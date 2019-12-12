@@ -58,8 +58,28 @@ resource "docker_container" "mysql-server" {
     read_only = false
 }
 }
+resource "docker_container" "zabbix-agent" {
+  image = "${docker_image.zabbix-agent.latest}"
+  must_run = true
+  networks = [ "${docker_network.private_network.name}" ]
+  hostname = "zabbix-agent"
+  name = "zabbix-agent"
+    volumes {
+    container_path  = "/etc/localtime/"
+    host_path = "/c/etc/localtime/"
+    read_only = false
+}
+ports {
+        internal = 10050
+        external = 10050
+        }
+}
+
 resource "docker_image" "zabbix-server" {
   name = "zabbix/zabbix-server-mysql:alpine-4.4-latest"
+}
+resource "docker_image" "zabbix-agent" {
+  name = "zabbix/zabbix-agent:alpine-4.4-latest"
 }
 resource "docker_image" "mysql" {
   name = "mysql:8.0"
