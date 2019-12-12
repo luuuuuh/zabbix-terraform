@@ -52,6 +52,11 @@ resource "docker_container" "mysql-server" {
   hostname = "mysql-server"
   env = ["MYSQL_ROOT_PASSWORD=zabbix", "MYSQL_PASSWORD=zabbix", "MYSQL_DATABASE=zabbix"]
   command = ["mysqld", "--character-set-server=utf8", "--collation-server=utf8_bin", "--default-authentication-plugin=mysql_native_password"]
+  volumes {
+    container_path = "/var/lib/mysql"
+    host-host_path = "/c/dbzabbix/"
+    read_only = false
+}
 }
 resource "docker_image" "zabbix-server" {
   name = "zabbix/zabbix-server-mysql:alpine-4.4-latest"
