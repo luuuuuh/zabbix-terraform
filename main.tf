@@ -54,7 +54,7 @@ resource "docker_container" "mysql-server" {
   command = ["mysqld", "--character-set-server=utf8", "--collation-server=utf8_bin", "--default-authentication-plugin=mysql_native_password"]
   volumes {
     container_path = "/var/lib/mysql"
-    host-host_path = "/c/dbzabbix/"
+    host_path = "/c/dbzabbix/"
     read_only = false
 }
 }
