@@ -1,5 +1,5 @@
 provider "docker"{
-   host = "tcp://127.0.0.1:2375/"
+   host = "tcp://localhost:2375/"
 }
 resource "docker_network" "private_network" {
   name = "my_network"
@@ -18,7 +18,12 @@ resource "docker_container" "zabbix-server" {
  
   volumes {
     container_path  = "/etc/localtime/"
-    host_path = "/c/etc/localtime/"
+    host_path = "/etc/localtime/"
+    read_only = false
+} 
+volumes {
+    container_path  = "/usr/lib/zabbix/alertscripts/"
+    host_path = "/zabbixscripts/"
     read_only = false
 } 
 
@@ -40,7 +45,7 @@ resource "docker_container" "zabbix-apache" {
         }
    volumes {
     container_path  = "/etc/localtime/"
-    host_path = "/c/etc/localtime/"
+    host_path = "/etc/localtime/"
     read_only = false
 }
 }
@@ -54,7 +59,7 @@ resource "docker_container" "mysql-server" {
   command = ["mysqld", "--character-set-server=utf8", "--collation-server=utf8_bin", "--default-authentication-plugin=mysql_native_password"]
   volumes {
     container_path = "/var/lib/mysql"
-    host_path = "/c/dbzabbix/"
+    host_path = "/dbzabbix/"
     read_only = false
 }
 }
@@ -62,11 +67,12 @@ resource "docker_container" "zabbix-agent" {
   image = "${docker_image.zabbix-agent.latest}"
   must_run = true
   networks = [ "${docker_network.private_network.name}" ]
+  env = ["ZBX_HOSTNAME=Zabbix server"]
   hostname = "zabbix-agent"
   name = "zabbix-agent"
     volumes {
     container_path  = "/etc/localtime/"
-    host_path = "/c/etc/localtime/"
+    host_path = "/etc/localtime/"
     read_only = false
 }
 ports {
