@@ -33,7 +33,7 @@ resource "docker_container" "zabbix-apache" {
   image = "${docker_image.zabbix-apache.latest}"
   must_run = true
   networks = [ "${docker_network.private_network.name}" ]
-  env = ["ZBX_ENABLE_SNMP_TRAPS=true", "MYSQL_ROOT_PASSWORD=zabbix", "MYSQL_PASSWORD=zabbix", "MYSQL_DATABASE=zabbix"]
+  env = ["ZBX_ENABLE_SNMP_TRAPS=true", "PHP_TZ=America/Sao_Paulo", "MYSQL_ROOT_PASSWORD=zabbix", "MYSQL_PASSWORD=zabbix", "MYSQL_DATABASE=zabbix"]
   name = "zabbix-apache"
   restart = "on-failure"
   hostname = "zabbix-apache"
