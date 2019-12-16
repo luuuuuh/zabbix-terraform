@@ -1,5 +1,5 @@
 provider "docker"{
-   host = "tcp://lcoalhost:2375/"
+   host = "tcp://localhost:2375/"
 }
 resource "docker_network" "private_network" {
   name = "my_network"
@@ -8,7 +8,7 @@ resource "docker_container" "zabbix-server" {
   image = "${docker_image.zabbix-server.latest}"
   must_run = true
   networks = [ "${docker_network.private_network.name}" ]
-  env = ["MYSQL_ROOT_PASSWORD=zabbix", "MYSQL_PASSWORD=zabbix", "MYSQL_DATABASE=zabbix", "MYSQL_USER=zabbix"]
+  env = ["MYSQL_ROOT_PASSWORD=zabbix","PHP_TZ=America/Sao_Paulo", "MYSQL_PASSWORD=zabbix", "MYSQL_DATABASE=zabbix", "MYSQL_USER=zabbix"]
   name  = "zabbix-server"
   restart = "on-failure"
   hostname = "zabbix-server"
